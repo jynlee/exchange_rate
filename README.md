@@ -11,13 +11,37 @@
 
 ```
 ~/exchange_rate/
-├── etl.py        # 메인 ETL 스크립트 (ECOS + FRED 증분 적재)
-├── run_etl.sh    # crontab용 자동화 스크립트
-├── .env          # API키, DB접속정보 (git 제외)
+├── .env                            # API키, DB접속정보 (git 제외)
 ├── .gitignore
-├── venv/         # Python 가상환경
-└── README.md
+├── README.md
+├── backend/
+│   ├── app.py                      # FastAPI 서버
+│   ├── etl.py                      # ETL 스크립트 (ECOS + FRED 증분 적재)
+│   ├── run_etl.sh                  # crontab 자동화 스크립트
+│   ├── requirements.txt            # Python 의존성
+│   └── venv/                       # Python 가상환경 (git 제외)
+├── frontend/
+│   ├── templates/index.html        # 대시보드 UI
+│   └── static/style.css            # 스타일
+├── db/
+│   └── schema.sql                  # 테이블 DDL
+└── docs/
+    ├── api.md                      # API 엔드포인트 명세
+    └── screenshots/                # 대시보드 스크린샷
 ```
+
+---
+
+## Screenshots
+
+**환율 추이 (USD/KRW)**
+![환율 추이](docs/screenshots/usd_krw_trend.jpg)
+
+**WTI 유가 추이**
+![WTI 유가 추이](docs/screenshots/wti_trend.jpg)
+
+**원화 에너지 비용**
+![원화 에너지 비용](docs/screenshots/energy_cost.jpg)
 
 ---
 
@@ -58,12 +82,12 @@ CREATE TABLE wti_daily (
 
 ```bash
 cd ~/exchange_rate
-python3 -m venv venv
-source venv/bin/activate
-pip install requests pymysql python-dotenv
+python3 -m venv backend/venv
+source backend/venv/bin/activate
+pip install -r backend/requirements.txt
 ```
 
-`.env` 파일 작성:
+`.env` 파일 작성 (프로젝트 루트):
 
 ```
 ECOS_API_KEY=your_key
@@ -75,19 +99,26 @@ DB_PASSWORD=your_password
 DB_NAME=exchange_rate
 ```
 
-### 수동 실행
+### ETL 수동 실행
 
 ```bash
-source venv/bin/activate
-python etl.py
+source backend/venv/bin/activate
+python backend/etl.py
+```
+
+### 대시보드 실행
+
+```bash
+source backend/venv/bin/activate
+uvicorn backend.app:app --port 8001 --host 0.0.0.0
 ```
 
 ### 자동 실행 (crontab)
 
-평일 14:00 KST 자동 실행. 로그는 `etl.log`에 누적.
+평일 14:00 KST 자동 실행. 로그는 `backend/etl.log`에 누적.
 
 ```
-0 14 * * 1-5 /home/ubuntu/exchange_rate/run_etl.sh
+0 14 * * 1-5 /home/ubuntu/exchange_rate/backend/run_etl.sh
 ```
 
 ---
