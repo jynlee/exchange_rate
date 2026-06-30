@@ -1,4 +1,4 @@
-# CLAUDE.md — exchange_rate 프로젝트 컨텍스트
+# CLAUDE.md — WTI_monitor_ETL 프로젝트 컨텍스트
 
 ## 프로젝트 개요
 
@@ -26,7 +26,7 @@
 ## 폴더 구조
 
 ```
-~/exchange_rate/
+~/WTI_monitor_ETL/
 ├── .env                            # API키·DB 접속정보 (git 제외)
 ├── .gitignore
 ├── README.md
@@ -91,7 +91,7 @@ python backend/etl.py
 ### crontab (평일 14:00 KST 자동 실행)
 
 ```
-0 14 * * 1-5 /home/ubuntu/exchange_rate/backend/run_etl.sh
+0 14 * * 1-5 /home/ubuntu/WTI_monitor_ETL/backend/run_etl.sh
 ```
 
 ---

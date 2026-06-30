@@ -1,4 +1,4 @@
-# exchange_rate ETL
+# WTI_monitor_ETL
 
 원/달러 환율(ECOS)과 WTI 유가(FRED)를 수집해 MySQL에 적재하는 자동화 파이프라인.
 
@@ -10,7 +10,7 @@
 ## 폴더 구조
 
 ```
-~/exchange_rate/
+~/WTI_monitor_ETL/
 ├── .env                            # API키, DB접속정보 (git 제외)
 ├── .gitignore
 ├── README.md
@@ -81,7 +81,7 @@ CREATE TABLE wti_daily (
 ### 환경 설정
 
 ```bash
-cd ~/exchange_rate
+cd ~/WTI_monitor_ETL
 python3 -m venv backend/venv
 source backend/venv/bin/activate
 pip install -r backend/requirements.txt
@@ -118,7 +118,7 @@ uvicorn backend.app:app --port 8001 --host 0.0.0.0
 평일 14:00 KST 자동 실행. 로그는 `backend/etl.log`에 누적.
 
 ```
-0 14 * * 1-5 /home/ubuntu/exchange_rate/backend/run_etl.sh
+0 14 * * 1-5 /home/ubuntu/WTI_monitor_ETL/backend/run_etl.sh
 ```
 
 ---
